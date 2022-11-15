@@ -1,4 +1,8 @@
+﻿using Finance.Helpers;
+using Finance.Interface;
+using Finance.Interfaces;
 using Finance.Model;
+using Finance.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +35,12 @@ namespace Finance
             services.AddDbContext<DataContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
+            services.AddControllersWithViews();// kết nối đường dẫn 
+            services.AddSession(option => { option.IdleTimeout = TimeSpan.FromMinutes(30); });
+            services.AddScoped<ICLassModel, ClassModelSvc>();
+            services.AddScoped<IUserModel, UserModelSvc>();
+            services.AddScoped<IEncode, EncodeHelper>();
+            services.AddScoped<IRoleModel, RoleModelSvc>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Finance", Version = "v1" });
